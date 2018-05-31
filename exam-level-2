@@ -1,6 +1,4 @@
 Missing exercises
-ft_atoi
-ft_strdup
 inter
 reverse_bits
 swap_bits
@@ -9,10 +7,83 @@ alpha_mirror
 max
 wdmatch
 do_op
-ft_strcmp
 ft_strrev
 
 =============================
+int		ft_atoi(char *str)
+{
+	int number;
+	int negative_number;
+	int i;
+
+	number = 0;
+	negative_number = 0;
+	i = 0;
+	while ((str[i] == ' ') || (str[i] == '\t') || (str[i] == '\n')
+			|| (str[i] == '\v') || (str[i] == '\r') || (str[i] == '\f'))
+		i++;
+	if (str[i] == 45)
+		negative_number = 1;
+	if ((str[i] == 45) || (str[i] == 43))
+		i++;
+	while ((str[i] >= 48) && (str[i] <= 57))
+	{
+		number = number * 10;
+		number += ((int)str[i] - 48);
+		i++;
+	}
+	if (negative_number)
+		return (-number);
+	else
+		return (number);
+}
+
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+char	*ft_strdup(char *src)
+{
+	int		i;
+	int		src_size;	// размер (количество символов) нынешнего массива
+	char	*new_str;
+
+	i = 0;
+	src_size = 0;
+	while (src[src_size])
+		src_size++;
+	new_str = (char*)malloc(sizeof(*new_str) * (src_size));	//1 умножить на кол-во символов
+	if (new_str == NULL)
+		return (NULL);
+	while (i < src_size)
+	{
+		new_str[i] = src[i];
+		i++;
+	}
+	new_str[src_size] = '\0'; 	// добавляет символ окончания строки
+	return (new_str);
+}
+
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] < s2[i])
+			return (-1); 	//1st is less than 2nd string
+		if (s1[i] > s2[i])
+			return (1);
+		i++;
+	}
+	return (0);	//strings are equal
+}
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 Assignment name  : last_word
 Expected files   : last_word.c
