@@ -1,0 +1,136 @@
+Missing exercises
+ft_atoi
+ft_strdup
+inter
+reverse_bits
+swap_bits
+union
+alpha_mirror
+max
+wdmatch
+do_op
+ft_strcmp
+ft_strrev
+
+=============================
+
+Assignment name  : last_word
+Expected files   : last_word.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays its last word followed by a \n.
+
+A word is a section of string delimited by spaces/tabs or by the start/end of
+the string.
+
+If the number of parameters is not 1, or there are no words, display a newline.
+
+Example:
+
+$> ./last_word "FOR PONY" | cat -e
+PONY$
+$> ./last_word "this        ...       is sparta, then again, maybe    not" | cat -e
+not$
+$> ./last_word "   " | cat -e
+$
+$> ./last_word "a" "b" | cat -e
+$
+$> ./last_word "  lorem,ipsum  " | cat -e
+lorem,ipsum$
+$>
+------------------------
+
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putstr(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] >= 33 && str[i] <= 126)
+			ft_putchar(str[i]);
+		i++;
+	}
+}
+
+void	display_word(char *str)
+{
+	char	*last;
+	int		i;
+
+	i = 0;
+	last = &str[i];
+	while (str[i] != '\0')
+	{
+		if (!(str[i] >= 33 && str[i] <= 126))
+		{
+			if (str[i + 1] >= 33 && str[i + 1] <= 126)
+				last = &str[i + 1];
+		}
+		i++;
+	}
+	if (last)
+		ft_putstr(last);
+}
+
+int		main(int argc, char **argv)
+{
+	if (argc == 2)
+		display_word(argv[1]);
+	ft_putchar('\n');
+	return (0);
+}
+---------------------------------------------------------------------------------------
+
+
+Assignment name  : print_bits
+Expected files   : print_bits.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a function that takes a byte, and prints it in binary WITHOUT A NEWLINE
+AT THE END.
+
+Your function must be declared as follows:
+
+void	print_bits(unsigned char octet);
+
+Example, if you pass 2 to print_bits, it will print "00000010"
+
+-----------------
+
+#include <unistd.h>
+
+void	print_bits(unsigned char octet)
+{
+	int oct;
+	int div;
+
+	div = 128;
+	oct = octet;
+	while (div != 0)
+	{
+		if (div <= oct)
+		{
+			write(1, "1", 1);
+			oct = oct % div;
+		}
+		else
+		{
+			write(1, "0", 1);
+		}
+		div = div / 2;
+	}
+}
+
+-----------------------------------------------------------------------------------
+
+
