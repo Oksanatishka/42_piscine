@@ -1,18 +1,395 @@
-Missing exercises
-ft_strcpy
-ft_strlen
-repeat_alpha
-rev_print
-ulstr
-rot_13
-first_word
-ft_swap
-first_word
-rev_print
+Missing exercise
 
 ================================
+char	*ft_strcpy(char *dest, char *src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = src[i];
+	return (dest);
+}
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void ft_swap(int *a, int *b)
+{
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+int		ft_strlen(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		i++;
+	}
+	return (i);
+}
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Assignment name  : rev_print
+Expected files   : rev_print.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string, and displays the string in reverse
+followed by a newline.
+
+If the number of parameters is not 1, the program displays a newline.
+
+Examples:
+
+$> ./rev_print "zaz" | cat -e
+zaz$
+$> ./rev_print "dub0 a POIL" | cat -e
+LIOP a 0bud$
+$> ./rev_print | cat -e
+$
+
+----------------------------
+
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+int		main(int argc, char **argv)
+{
+	int	i;
+
+	i = 0;
+	if (argc == 2)
+	{
+		while (argv[1][i] != '\0')
+		{
+			i++;
+		}
+		while (i >= 0)
+		{
+			ft_putchar(argv[1][i]);
+			i--;
+		}
+	}
+	ft_putchar('\n');
+	return (0);
+}
+--------------------------------------------------------------------------------
+Assignment name  : rot_13
+Expected files   : rot_13.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays it, replacing each of its
+letters by the letter 13 spaces ahead in alphabetical order.
+
+'z' becomes 'm' and 'Z' becomes 'M'. Case remains unaffected.
+
+The output will be followed by a newline.
+
+If the number of arguments is not 1, the program displays a newline.
+
+Example:
+
+$>./rot_13 "abc"
+nop
+$>./rot_13 "My horse is Amazing." | cat -e
+Zl ubefr vf Nznmvat.$
+$>./rot_13 "AkjhZ zLKIJz , 23y " | cat -e
+NxwuM mYXVWm , 23l $
+$>./rot_13 | cat -e
+$
+$>
+$>./rot_13 "" | cat -e
+$
+$>
+-------------------------------------
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+char	ft_rot_13(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] >= 'A' && str[i] <= 'M')
+		{
+			ft_putchar(str[i] + 13);
+		}
+		else if (str[i] >= 'N' && str[i] <= 'Z')
+		{
+			ft_putchar(str[i] - 13);
+		}
+		else if (str[i] >= 'a' && str[i] <= 'm')
+		{
+			ft_putchar(str[i] + 13);
+		}
+		else if (str[i] >= 'n' && str[i] <= 'z')
+		{
+			ft_putchar(str[i] - 13);
+		}
+		else
+		{
+			ft_putchar(str[i]);
+		}
+		i++;
+	}
+	ft_putchar('\n');
+	return (*str);
+}
+
+int		main(int argc, char **argv)
+{
+	if (argc == 2)
+	{
+		ft_rot_13(argv[1]);
+	}
+	else
+	{
+		ft_putchar('\n');
+	}
+	return (0);
+}
+
+--------------------------------------------------------------------------------
 
 
+
+Assignment name  : ulstr
+Expected files   : ulstr.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and reverses the case of all its letters.
+Other characters remain unchanged.
+
+You must display the result followed by a '\n'.
+
+If the number of arguments is not 1, the program displays '\n'.
+
+Examples :
+
+$>./ulstr "L'eSPrit nE peUt plUs pRogResSer s'Il staGne et sI peRsIsTent VAnIte et auto-justification." | cat -e
+l'EspRIT Ne PEuT PLuS PrOGrESsER S'iL STAgNE ET Si PErSiStENT vaNiTE ET AUTO-JUSTIFICATION.$
+$>./ulstr "S'enTOuRer dE sECreT eSt uN sIGnE De mAnQuE De coNNaiSSanCe.  " | cat -e
+s'ENtoUrER De SecREt EsT Un SigNe dE MaNqUe dE COnnAIssANcE.  $
+$>./ulstr "3:21 Ba  tOut  moUn ki Ka di KE m'en Ka fe fot" | cat -e
+3:21 bA  ToUT  MOuN KI kA DI ke M'EN kA FE FOT$
+$>./ulstr | cat -e
+$
+----------------------------------------
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+char	ft_ulstr(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] >= 'A' && str[i] <= 'Z')
+		{
+			ft_putchar(str[i] + 32);
+		}
+		else if (str[i] >= 'a' && str[i] <= 'z')
+		{
+			ft_putchar(str[i] - 32);
+		}
+		else
+		{
+			ft_putchar(str[i]);
+		}
+		i++;
+	}
+	ft_putchar('\n');
+	return (*str);
+}
+
+int		main(int argc, char **argv)
+{
+	if (argc == 2)
+	{
+		ft_ulstr(argv[1]);
+	}
+	else
+	{
+		ft_putchar('\n');
+	}
+	return (0);
+}
+--------------------------------------------------------------------------------
+
+
+
+
+Assignment name  : first_word
+Expected files   : first_word.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays its first word, followed by a
+newline.
+
+A word is a section of string delimited by spaces/tabs or by the start/end of
+the string.
+
+If the number of parameters is not 1, or if there are no words, simply display
+a newline.
+
+Examples:
+
+$> ./first_word "FOR PONY" | cat -e
+FOR$
+$> ./first_word "this        ...       is sparta, then again, maybe    not" | cat -e
+this$
+$> ./first_word "   " | cat -e
+$
+$> ./first_word "a" "b" | cat -e
+$
+$> ./first_word "  lorem,ipsum  " | cat -e
+lorem,ipsum$
+$>
+--------------------------------------------
+
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+int		main(int ac, char **av)
+{
+	int	i;
+
+	if (ac == 2)
+	{
+		i = 0;
+		while (av[1][i] == ' ' || av[1][i] == '\t')
+		{
+			i++;
+		}
+		while (av[1][i] != '\0' && av[1][i] != ' ' && av[1][i] != '\t')
+		{
+			ft_putchar(av[1][i]);
+			i++;
+		}
+	}
+	ft_putchar('\n');
+	return (0);
+}
+--------------------------------------------------------------------------------
+
+
+Assignment name  : repeat_alpha
+Expected files   : repeat_alpha.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program called repeat_alpha that takes a string and display it
+repeating each alphabetical character as many times as its alphabetical index,
+followed by a newline.
+
+'a' becomes 'a', 'b' becomes 'bb', 'e' becomes 'eeeee', etc...
+
+Case remains unchanged.
+
+If the number of arguments is not 1, just display a newline.
+
+Examples:
+
+$>./repeat_alpha "abc"
+abbccc
+$>./repeat_alpha "Alex." | cat -e
+Alllllllllllleeeeexxxxxxxxxxxxxxxxxxxxxxxx.$
+$>./repeat_alpha 'abacadaba 42!' | cat -e
+abbacccaddddabba 42!$
+$>./repeat_alpha | cat -e
+$
+$>
+$>./repeat_alpha "" | cat -e
+$
+$>
+------------------------
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+char	ft_repeat_alpha(char *str)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] >= 'A' && str[i] <= 'Z')
+		{
+			j = str[i] - 65;
+			while (j >= 0)
+			{
+				ft_putchar(str[i]);
+				j--;
+			}
+		}
+		else if (str[i] >= 'a' && str[i] <= 'z')
+		{
+			j = str[i] - 97;
+			while (j >= 0)
+			{
+				ft_putchar(str[i]);
+				j--;
+			}
+		}
+		else
+		{
+			ft_putchar(str[i]);
+		}
+		i++;
+	}
+	ft_putchar('\n');
+	return (*str);
+}
+
+int		main(int argc, char **argv)
+{
+	if (argc == 2)
+	{
+		ft_repeat_alpha(argv[1]);
+	}
+	else
+	{
+		ft_putchar('\n');
+	}
+	return (0);
+}
+--------------------------------------------------------------------------------
 Assignment name  : ft_swap
 Expected files   : ft_swap.c
 Allowed functions:
