@@ -266,9 +266,11 @@ void	print_bits(unsigned char octet)
 
 
 Byte to bits : converting a byte to binary the hard way
-For each bit position you need to figure out if the bit adds to the total value (has a bit value of 1) or does not add to the total (has a bit value of zero).
+For each bit position you need to figure out if the bit adds to the total value (has a bit value of 1) 
+or does not add to the total (has a bit value of zero).
 
-Starting with the highest bit position value you divide the number by the bit position value. If the result is greater or equal to 1 then it contributes. Here's an example:
+Starting with the highest bit position value you divide the number by the bit position value. 
+If the result is greater or equal to 1 then it contributes. Here's an example:
 
 If you think of the number 174.
 
@@ -288,4 +290,6 @@ If you think of the number 174.
 
 0 / 1= 0.000 : whole part 0
 
-So the binary number is 10101110 : you have converted the binary number from a bit into a byte using 16 calculations! (16 if you work as a computer would i.e. do a subtraction for each line regardless of whether the whole number is zero or not).
+So the binary number is 10101110 : you have converted the binary number from a bit into a byte using 16 calculations! 
+(16 if you work as a computer would i.e. do a subtraction for each line regardless of whether the whole number is zero 
+or not).
