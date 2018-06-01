@@ -124,8 +124,11 @@ void	last_word(char *str)
 	j = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] == ' ' && str[i + 1] >= 33 && str[i + 1] <= 127)
-			j = i + 1;
+		if (!(str[i] >= 33 && str[i] <= 126)) //if current element is not a valid character (e.g. tab or space)
+		{
+			if (str[i + 1] >= 33 && str[i + 1] <= 126)
+				j = i + 1;
+		}
 		i++;
 	}
 	while (str[j] >= 33 && str[j] <= 127)
