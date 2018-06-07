@@ -3,3 +3,614 @@ brainfuck
 print_memory
 ft_itoa_base
 ========================
+====================================================================================================
+====================================================================================================
+====================================================================================================
+====================================================================================================
+brainfuck.c
+
+#include <unistd.h>
+#include <stdlib.h>
+
+void	brainfuck(char *str)
+{
+	char	*ptr;
+
+	ptr = (char*)malloc(sizeof(char) * 2048);
+	while (*str)
+	{
+		if (*str == '>')
+			ptr++;
+		else if (*str == '<')
+			ptr--;
+		else if (*str == '+')
+			*ptr++;
+		else if (*str == '-')
+			*ptr--;
+		else if (*str == '[' && !*ptr)
+			while (*str != ']')
+				*str++;
+		else if (*str == ']' && !*ptr)
+			while (*str != '[')
+				*str--;
+		else if (*str == '.')
+			write(1, ptr, 1);
+		str++;
+	}
+}
+
+int		main(int argc, char **argv)
+{
+	if (argc == 2 && argv[1][0])
+		brainfuck(argv[1]);
+	write(1, "\n", 1);
+}
+
+====================================================================================================
+Assignment name  : print_memory
+Expected files   : print_memory.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a function that takes (const void *addr, size_t size), and displays the
+memory as in the example.
+
+Your function must be declared as follows:
+
+void	print_memory(const void *addr, size_t size);
+
+---------
+$> cat main.c
+void	print_memory(const void *addr, size_t size);
+
+int	main(void)
+{
+	int	tab[10] = {0, 23, 150, 255,
+	              12, 16,  21, 42};
+
+	print_memory(tab, sizeof(tab));
+	return (0);
+}
+$> gcc -Wall -Wall -Werror main.c print_memory.c && ./a.out | cat -e
+0000 0000 1700 0000 9600 0000 ff00 0000 ................$
+0c00 0000 1000 0000 1500 0000 2a00 0000 ............*...$
+0000 0000 0000 0000                     ........$
+
+-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+print_memory.c 
+
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putstr(char *s)
+{
+	while (*s)
+		ft_putchar(*s++);
+}
+
+void	ft_printhex(int n)
+{
+	int c;
+
+	if (n >= 16)
+		ft_printhex(n / 16);
+	c = n % 16 + (n % 16 < 10 ? '0' : 'a' - 10);
+	ft_putchar(c);
+}
+
+void	ft_printchars(unsigned char c)
+{
+	ft_putchar((c > 31 && c < 127) ? c : '.');
+}
+
+void	print_memory(const void *addr, size_t size)
+{
+	unsigned char *t = (unsigned char *)addr;
+	size_t		i = 0;
+	int			col;
+	size_t		tmp = 0;
+
+	while (i < size)
+	{
+		col = -1;
+		tmp = i;
+		while (++col < 16)
+		{
+			if (i < size)
+			{
+				if (t[i] < 16)
+					ft_putchar('0');
+				ft_printhex(t[i]);
+			}
+			else
+				ft_putstr("  ");
+			ft_putchar((i++ & 1) << 6);
+		}
+		col = -1;
+		i = tmp;
+		while (++col < 16 && i < size)
+			ft_printchars(t[i++]);
+		ft_putchar('\n');
+	}
+}
+====================================================================================================
+
+Assignment name  : ft_itoa_base
+Expected files   : ft_itoa_base.c
+Allowed functions: malloc
+--------------------------------------------------------------------------------
+
+Write a function that converts an integer value to a null-terminated string
+using the specified base and stores the result in a char array that you must
+allocate.
+
+The base is expressed as an integer, from 2 to 16. The characters comprising
+the base are the digits from 0 to 9, followed by uppercase letter from A to F.
+
+For example, base 4 would be "0123" and base 16 "0123456789ABCDEF".
+
+If base is 10 and value is negative, the resulting string is preceded with a
+minus sign (-). With any other base, value is always considered unsigned.
+
+Your function must be declared as follows:
+
+char	*ft_itoa_base(int value, int base);
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=
+
+#include <stdlib.h>
+#include <stdio.h> //malloc protection isn't required for the exam
+
+char	*ft_itoa_base(int value, int base)
+{
+	char	*s;
+	long	n;
+	int		sign;
+	int		i;
+
+	n = (value < 0) ? -(long)value : value;
+	sign = (value < 0 && base == 10) ? -1 : 0;
+	i = (sign == -1) ? 2 : 1;
+	while ((n /= base) >= 1)
+		i++;
+	s = (char*)malloc(sizeof(char) * (i + 1));
+	s[i] = '\0';
+	n = (value < 0) ? -(long)value : value;
+	while (i-- + sign)
+	{
+		s[i] = (n % base < 10) ? n % base + '0' : n % base + 'A' - 10;
+		n /= base;
+	}
+	(i == 0) ? s[i] = '-' : 0;
+	return (s);
+}
+
+int		main(int ac, char **av)//
+{//
+	if (ac == 3)//
+		printf("%s", ft_itoa_base(atoi(av[1]), atoi(av[2])));//
+	return (1);//
+}//
+====================================================================================================
+Assignment name  : brackets 
+Expected files   : *.c *.h
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes an undefined number of strings in arguments. For each
+argument, the program prints on the standard output "OK" followed by a newline 
+if the expression is correctly bracketed, otherwise it prints "Error" followed by
+a newline.
+
+Symbols considered as 'brackets' are brackets '(' and ')', square brackets '[' 
+and ']'and braces '{' and '}'. Every other symbols are simply ignored.
+
+An opening bracket must always be closed by the good closing bracket in the 
+correct order. A string which not contains any bracket is considered as a 
+correctly bracketed string.
+
+If there is no arguments, the program must print only a newline.
+
+Examples :
+
+$> ./brackets '(johndoe)' | cat -e
+OK$
+$> ./brackets '([)]' | cat -e
+Error$
+$> ./brackets '' '{[(0 + 0)(1 + 1)](3*(-1)){()}}' | cat -e
+OK$
+OK$
+$> ./brackets | cat -e
+$
+$>
+-=-=-=-==-=-=--=-=-=--=-=-=-=-=-=-
+
+#include <unistd.h>
+
+int	braclose(char *str, char c, int i, int b)
+{
+	while (b && *(++str) && (i++))
+		if (*str == c || *str == c + c % 2 + 1)
+			*str == c ? ++b : --b;
+	return (i);
+}
+
+int	brackets(char *str, char c)
+{
+	if (*str == c)
+		return (1);
+	else if (!*str || *str == ')' || *str == '}' || *str == ']')
+		return (0);
+	else if (*str == '(' || *str == '{' || *str == '[')
+		return (brackets(str + 1, *str + *str % 2 + 1)
+			* brackets(str + braclose(str, *str, 1, 1), c));
+	else
+		return (brackets(str + 1, c));
+}
+
+int	main(int ac, char **av)
+{
+	int	i;
+
+	i = 0;
+	if (ac > 1)
+		while (++i < ac)
+			brackets(av[i], 0) ? write(1, "OK\n", 3) : write(1, "Error\n", 6);
+	else
+		write(1, "\n", 1);
+	return (0);
+}
+
+
+
+====================================================================================================
+Assignment name  : rpn_calc
+Expected files   : *.c, *.h 
+Allowed functions: atoi, printf, write, malloc, free
+--------------------------------------------------------------------------------
+
+Write a program that takes a string which contains an equation written in
+Reverse Polish notation (RPN) as its first argument, evaluates the equation, and
+prints the result on the standard output followed by a newline. 
+
+Reverse Polish Notation is a mathematical notation in which every operator
+follows all of its operands. In RPN, every operator encountered evaluates the
+previous 2 operands, and the result of this operation then becomes the first of
+the two operands for the subsequent operator. Operands and operators must be
+spaced by at least one space.
+
+You must implement the following operators : "+", "-", "*", "/", and "%".
+
+If the string isn't valid or there isn't exactly one argument, you must print
+"Error" on the standard output followed by a newline.
+
+All the given operands must fit in a "int".
+
+Examples of formulas converted in RPN:
+
+3 + 4                   >>    3 4 +
+((1 * 2) * 3) - 4       >>    1 2 * 3 * 4 -  ou  3 1 2 * * 4 -
+50 * (5 - (10 / 9))     >>    5 10 9 / - 50 *
+
+Here's how to evaluate a formula in RPN:
+
+1 2 * 3 * 4 -
+2 3 * 4 -
+6 4 -
+2
+
+Or:
+
+3 1 2 * * 4 -
+3 2 * 4 -
+6 4 -
+2
+
+Examples:
+
+$> ./rpn_calc "1 2 * 3 * 4 +" | cat -e
+10$
+$> ./rpn_calc "1 2 3 4 +" | cat -e
+Error$
+$> ./rpn_calc |cat -e
+Error$
+
+-=-=-=-=-=-=-=--=-=-=-=-=--=-=-
+
+check.c
+
+#include "rpn_calc.h"
+
+int	check_input(char *s)
+{
+	int	num_c;
+	int	op_c;
+
+	num_c = 0;
+	op_c = 0;
+	while (*s)
+	{
+		if (!(is_op(*s) || is_digit(*s) || is_space(*s)))
+			return (0);
+		if (is_op(*s))
+		{
+			if (num_c && (*(s - 1)) && !is_space(*(s - 1)))
+					return (0);
+			op_c++;
+			if ((*s == '-' || *s == '+') && (*(s + 1)) &&
+					is_digit(*(s + 1)))
+				op_c--;
+		}
+		else if (is_digit(*s))
+		{
+			if (!num_c || (*(s - 1) && !is_digit(*(s - 1))))
+				num_c++;
+		}
+		if (is_space(*s) && num_c <= op_c)
+			return (0);
+		++s;
+	}
+	return (num_c - op_c == 1 ? 1 : 0);
+}
+
+-=-=-
+
+is.c
+
+#include "rpn_calc.h"
+
+int	is_op(int c)
+{
+	return (c == '+' ||
+			c == '-' ||
+			c == '*' ||
+			c == '/' ||
+			c == '%');
+}
+
+int	is_digit(int c)
+{
+	return ('0' <= c && c <= '9');
+}
+
+int	is_space(int c)
+{
+	return (c == 32);
+}
+
+
+main.c
+
+#include "rpn_calc.h"
+
+int	main(int ac, char **av)
+{
+	if (ac == 2 && check_input(av[1]))
+		rpn_calc(av[1]);
+	else
+		printf("Error\n");
+	return (0);
+}
+
+rpn_calc.c
+
+#include "rpn_calc.h"
+
+
+void	rpn_calc(char *s)
+{
+	t_s	**stack;
+	int	num1;
+	int	num2;
+
+	if (!(stack = (t_s **)malloc(sizeof(t_s*))))
+		return ;
+	while (*s)
+	{
+		while (*s && is_space(*s))
+			s++;
+		if (*s && is_digit(*s))
+		{
+			push(stack, atoi(s));
+			while (*s && is_digit(*s))
+				s++;
+		}
+		else if (*s && is_op(*s))
+		{
+			if (*(s + 1) && is_digit(*(s + 1)))
+			{
+				push(stack, atoi(s));
+				s++;
+				while (is_digit(*s))
+					s++;
+			}
+			else {
+				num1 = pop(stack);
+				num2 = pop(stack);
+				if (num2 == 0 && (*s == '/' || *s == '%'))
+				{
+					printf("Error\n");
+					return ;
+				}
+				push(stack, do_op(num1, num2, *s));
+				s++;
+			}
+		}
+	}
+	printf("%i\n", (*stack)->i);
+	
+}
+
+void	push(t_s **stack, int i)
+{
+	t_s	*link;
+
+	if (!(link = (t_s *)malloc(sizeof(t_s))))
+		return ;
+	link->i = i;
+	if (*stack)
+	{
+		link->next = *stack;
+		*stack = link;
+	}
+	else
+	{
+		link->next = *stack;
+		stack = &link;
+	}
+}
+
+int		pop(t_s **stack)
+{
+	int	num;
+	t_s *tmp;
+
+	num = (*stack)->i;
+	tmp = (*stack);
+	*stack = (*stack)->next;
+	free(tmp);
+	return (num);
+}
+
+int	do_op(int i, int j, char c)
+{
+	if (c == '+')
+		return (i + j);
+	else if (c == '-')
+		return (i - j);
+	else if (c == '*')
+		return (i * j);
+	else if (c == '/')
+		return (i / j);
+	else if (c == '%')
+		return (i % j);
+	return (0);
+}
+
+rpn_calc.h
+
+#ifndef RPN_CALC_H
+# define RPN_CALC_H
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+typedef struct	s_s
+{
+	int			i;
+	struct s_s	*next;
+}				t_s;
+
+int		check_input(char *s);
+
+void	rpn_calc(char *s);
+void	push(t_s **stack, int i);
+int		pop(t_s **stack);
+int		do_op(int i, int j, char o);
+
+int		is_op(int c);
+int		is_digit(int c);
+int		is_space(int c);
+
+#endif
+
+
+====================================================================================================
+Assignment name  : options
+Expected files   : *.c *.h
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes an undefined number of arguments which could be 
+considered as options and writes on standard output a representation of those
+options as groups of bytes followed by a newline.
+
+An option is an argument that begins by a '-' and have multiple characters 
+which could be : abcdefghijklmnopqrstuvwxyz
+
+All options are stocked in a single int and each options represents a bit of that
+int, and should be stocked like this : 
+
+00000000 00000000 00000000 00000000
+******zy xwvutsrq ponmlkji hgfedcba
+
+Launch the program without arguments or with the '-h' flag activated must print
+an usage on the standard output, as shown in the following examples.
+
+A wrong option must print "Invalid Option" followd by a newline.
+
+Examples :
+$>./options
+options: abcdefghijklmnopqrstuvwxyz
+$>./options -abc -ijk
+00000000 00000000 00000111 00000111
+$>./options -z
+00000010 00000000 00000000 00000000
+$>./options -abc -hijk
+options: abcdefghijklmnopqrstuvwxyz
+$>./options -%
+Invalid Option
+
+-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+#include <unistd.h>
+
+int main(int ac, char **av)
+{
+	int i = 1;
+	int  t[32] = {0}; 
+	int j ;
+
+	if(ac == 1)
+	{
+		write(1,"options: abcdefghijklmnopqrstuvwxyz\n",36);
+		return 0;
+	}
+	i = 1;
+	while (i < ac)
+	{
+		j = 1;
+		if(av[i][0] == '-')
+		{
+			while(av[i][j] && av[i][j] >= 'a'  && av[i][j] <= 'z')
+			{
+				if(av[i][j] == 'h')
+				{
+					write(1,"options: abcdefghijklmnopqrstuvwxyz\n",36);
+					return 0;
+				}
+
+				t['z' - av[i][j] + 6] = 1;
+				j++;
+			}
+
+			if (av[i][j])
+			{
+				write(1,"Invalid Option\n",15);
+				return 0;
+			}
+			j++;
+		}
+		i++;
+	}
+	i = 0;
+		while (i < 32)
+		{
+		t[i] = '0' + t[i];
+		write(1,&t[i++],1);
+			if(i == 32)
+				write(1,"\n",1);
+			else if(i % 8 == 0)
+				write(1," ",1);
+
+		}
+
+	return 0;
+}
+====================================================================================================
